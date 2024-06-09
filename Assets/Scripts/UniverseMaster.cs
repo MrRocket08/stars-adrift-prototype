@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UniverseMaster : MonoBehaviour
 {
-    public static float physicsTimeStep = 0.05f;
+    public static float physicsTimeStep = 0.1f;
     public static float universalGravity = 5f;
 
     CelestialBody[] bodies;

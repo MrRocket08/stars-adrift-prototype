@@ -11,7 +11,7 @@ public class CelestialBody : MonoBehaviour
     public Vector2 initialVelocity;
     public SizingScript sc;
 
-    Vector2 currentVelocity;
+    protected Vector2 currentVelocity;
 
     private void Awake()
     {

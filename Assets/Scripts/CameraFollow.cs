@@ -13,7 +13,6 @@ public class CameraFollow : MonoBehaviour
     public float maxDown;
 
     private Vector3 newPos;
-    private Vector3 cursorPos;
     private Camera cam;
     CelestialBody[] bodies;
     int bodyIndex = 0;
@@ -22,7 +21,9 @@ public class CameraFollow : MonoBehaviour
     {
         cam = Camera.main;
         bodies = FindObjectsOfType<CelestialBody>();
-        target = bodies[bodyIndex].GetComponent<Transform>();
+        target = GameObject.Find("Ship").GetComponent<Transform>();
+
+        //target = bodies[bodyIndex].GetComponent<Transform>();
     }
 
     // Update is called once per frame
@@ -30,6 +31,7 @@ public class CameraFollow : MonoBehaviour
     {
         newPos = new Vector3(target.position.x, target.position.y, -1f);
 
+        /*
         if(Input.GetKeyDown("right"))
         {
             if(bodyIndex < bodies.Length - 1)
@@ -55,7 +57,7 @@ public class CameraFollow : MonoBehaviour
                 bodyIndex = bodies.Length - 1;
                 target = bodies[bodyIndex].GetComponent<Transform>();
             }
-        }
+        } */
     }
 
     void FixedUpdate()
