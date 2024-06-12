@@ -8,20 +8,24 @@ public class OrbitRenderer : MonoBehaviour
 {
 	public int numVertices = 120;
 
-	public Vector2 currentManeuverDir;
-	public float currentManeuverMag;
+	public float width;
 
-	struct VirtualShip
+	Ship[] ships;
+	Vector3[][] renderPastPoints;
+	Vector3[][] renderFuturePoints;
+	CelestialBody sun;
+
+	class VirtualShip
 	{
 		public Vector2 position;
 		public Vector2 velocity;
 		public float mass;
 
-		public VirtualShip(Vector2 _position, Vector2 _velocity, float _mass)
+		public VirtualShip(Ship ship)
 		{
-			position = _position;
-			velocity = _velocity;
-			mass = _mass;
+			position = ship.transform.position;
+			velocity = ship.GetComponent<Rigidbody2D>().velocity;
+			mass = ship.wetMass;
 		}
 
 		public void setPos(Vector2 _position)
@@ -37,7 +41,10 @@ public class OrbitRenderer : MonoBehaviour
 
 	private void Start()
 	{
-		if(Application.isPlaying)
+		ships = FindObjectsOfType<Ship>();
+		sun = GameObject.Find("Sun").GetComponent<CelestialBody>();
+
+		if(!Application.isPlaying)
 		{
 			HideOrbits();
 		}
@@ -45,7 +52,7 @@ public class OrbitRenderer : MonoBehaviour
 
 	private void Update()
 	{
-		if(!Application.isPlaying)
+		if(Application.isPlaying)
 		{
 			RenderOrbits();
 		}
@@ -53,40 +60,57 @@ public class OrbitRenderer : MonoBehaviour
 
 	private void RenderOrbits()
 	{
-		Ship[] ships = FindObjectsOfType<Ship>();
-		var renderPoints = new Vector2[ships.Length][];
+		renderFuturePoints = new Vector3[ships.Length][];
 
 		for (int i = 0; i < ships.Length; i++)
 		{
-			VirtualShip vs = new VirtualShip((Vector2)ships[i].transform.position, (Vector2)ships[i].GetComponent<Rigidbody2D>().velocity, ships[i].mass);
+			VirtualShip vs = new VirtualShip(ships[i]);
 
-			renderPoints[i] = new Vector2[numVertices];
+			renderFuturePoints[i] = new Vector3[numVertices];
 
 			Vector2 newPos = vs.position;
-			renderPoints[i][0] = newPos;
+			renderFuturePoints[i][0] = newPos;
 
 			for (int vertex = 1; vertex < numVertices; vertex++)
 			{
-				newPos = Vector2.zero;
+				newPos = renderFuturePoints[i][vertex - 1];
 
 				newPos += vs.velocity * UniverseMaster.physicsTimeStep;
 
-				renderPoints[i][vertex] = newPos;
+				renderFuturePoints[i][vertex] = newPos;
 
-				vs.velocity = CalculateVelocity(vs);
+				vs.velocity += CalculateVelocity(vs, ships[i].GetManeuver()) * UniverseMaster.physicsTimeStep;
 			}
 		}
+
+		for (int shipIndex = 0; shipIndex < ships.Length; shipIndex++)
+		{
+			//var pathColour = ships[shipIndex].gameObject.GetComponent<SpriteRenderer>().color;
+
+            var lineRenderer = ships[shipIndex].gameObject.GetComponent<LineRenderer>();
+            lineRenderer.enabled = true;
+            lineRenderer.positionCount = renderFuturePoints[shipIndex].Length;
+            lineRenderer.SetPositions(renderFuturePoints[shipIndex]);
+            //lineRenderer.startColor = pathColour;
+            //lineRenderer.endColor = pathColour;
+            lineRenderer.widthMultiplier = width;
+        }
 	}
 
-	private Vector2 CalculateVelocity(VirtualShip _vs)
+	private Vector2 CalculateVelocity(VirtualShip _vs, Ship.maneuver man)
 	{
-		Vector2 currentVelocity = _vs.velocity;
-
-		return Vector2.zero;
+		return man.direction * man.magnitude;
 	}
 
-	private void HideOrbits()
-	{
+    private void HideOrbits()
+    {
+        Ship[] ships = FindObjectsOfType<Ship>();
 
-	}
+        // Draw paths
+        for (int shipIndex = 0; shipIndex < ships.Length; shipIndex++)
+        {
+            var lineRenderer = ships[shipIndex].gameObject.GetComponent<LineRenderer>();
+            lineRenderer.positionCount = 0;
+        }
+    }
 }
