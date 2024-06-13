@@ -31,8 +31,6 @@ public class CameraFollow : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		newPos = new Vector3(target.position.x, target.position.y, -1f);
-
 		scrollMoment = Input.GetAxisRaw("Zoom");
 		Debug.Log(scrollMoment);
 
@@ -67,6 +65,8 @@ public class CameraFollow : MonoBehaviour
 
 	void FixedUpdate()
 	{
+		newPos = new Vector3(target.position.x, target.position.y, -1f);
+
 		transform.position = newPos;
 
 		cam.orthographicSize += scrollMoment;
