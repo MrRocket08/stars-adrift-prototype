@@ -1748,12 +1748,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0394v\t\t30.345 km/s\n\nVEL\t\t450.6 m/s\n--VELX\t435.4 m/s\n--VELY\t230.9
-    m/s\n\nFUEL\t4789/5000\n--%\t\t96 %\n\nKTC\t\t12506/15000\n--%\t\t83 %\n\nMSL\t\t8/10\n--%\t\t80
-    %\n\nHEAT\t45/54 MW\n--%\t\t83 %\n"
+  m_text: '[NULL]'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: bd785af7a39454836abdfcb880c52b6c, type: 2}
+  m_sharedMaterial: {fileID: 5050745097484803872, guid: bd785af7a39454836abdfcb880c52b6c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1813,7 +1811,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: -625.3109}
+  m_margin: {x: 0, y: 0, z: -96.97119, w: -625.3109}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -2411,8 +2409,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1001 - TEL
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: bd785af7a39454836abdfcb880c52b6c, type: 2}
+  m_sharedMaterial: {fileID: 5050745097484803872, guid: bd785af7a39454836abdfcb880c52b6c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2472,7 +2470,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -24.4057, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -2749,7 +2747,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "FRNG: M_2056\n\nAMMO:\t4863 / 5000\n--%\t\t97 %"
+  m_text: "FRNG: M_2056 (+2)\n\nAMMO:\t4863 / 5000\n--%\t\t97 %"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5354,7 +5352,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -250, y: 375}
+  m_AnchoredPosition: {x: -260, y: 375}
   m_SizeDelta: {x: 500, y: 750}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &1181465146
