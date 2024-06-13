@@ -77,23 +77,6 @@ public class Ship : MonoBehaviour
 			heat = 0;
 
         wetMass = dryMass + fuel;
-
-		telemetry.text = "Δv		" + (effectiveExhaustVelocity * Mathf.Log(wetMass / dryMass) / 1000).ToString("F3") + " KM / S" +
-			"\n\nVEL     " + velocity.magnitude.ToString("F2") + " M / S" +
-			"\n--VELX  " + velocity.x.ToString("F2") + " M / S" +
-			"\n--VELY  " + velocity.y.ToString("F2") + " M / S" +
-
-			"\n\nFUEL    " + fuel.ToString("F1") + " / " + maxFuel.ToString("F1") +
-			"\n--%		" + (fuel / maxFuel * 100).ToString("F2") + " %" +
-
-			"\n\nKTC     " + ktcAmmo.ToString("F0") + " / " + maxKtcAmmo.ToString("F0") +
-			"\n--%		" + (ktcAmmo / maxKtcAmmo * 100).ToString("F2") + " %" +
-
-			"\n\nMSL     " + mslAmmo.ToString("F0") + " / " + maxMslAmmo.ToString("F0") +
-			"\n--%		" + (mslAmmo / maxMslAmmo * 100).ToString("F2") + " %" +
-
-			"\n\nHEAT    " + heat.ToString("F1") + " / " + heatCapacity.ToString("F1") + " MW" +
-			"\n--%		" + (heat / heatCapacity * 100).ToString("F2") + " %";
 	}
 
 	void FixedUpdate()
