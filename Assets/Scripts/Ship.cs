@@ -26,6 +26,8 @@ public class Ship : MonoBehaviour
 	public float turnAccel;
 	public float mainAccel;
 
+	Module[] modules = new Module[8];
+
 	// OTHER FIELDS
 	public enum Alignment { ally, neutral, enemy }
 
@@ -69,14 +71,37 @@ public class Ship : MonoBehaviour
 		fuel -= Mathf.Abs(burnFraction) / 1000; // mass flow rate in METRIC TONNES
 		fuel -= Mathf.Abs(turnFraction) / 1000;
 
-		if (burnFraction != 0)
-			heat += Mathf.Abs(burnFraction * mainAccel) / 1000;
-		else if (heat > 0)
-			heat -= Time.deltaTime;
-		else
-			heat = 0;
+		heat += AccumulateHeat();
+		heat -= RadiateHeat();
 
         wetMass = dryMass + fuel;
+	}
+
+	private float AccumulateHeat()
+	{
+		float sumHeat = 0f;
+
+		foreach (Module c in modules)
+		{
+			sumHeat += c.GenerateHeat();
+		}
+
+		return sumHeat;
+	}
+
+	private float RadiateHeat()
+	{
+		float radiatedHeat = 0f;
+
+		foreach (Module c in modules)
+		{
+			if (c is Radiator)
+			{
+				radiatedHeat += ((Radiator)c).RadiateHeat();
+			}
+		}
+
+		return radiatedHeat;
 	}
 
 	void FixedUpdate()
