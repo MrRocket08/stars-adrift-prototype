@@ -9,9 +9,12 @@ public class Module : MonoBehaviour
 	Status status;
 
 	protected int size; // integer from 1-5, weapons only have 1-3
+	protected int mass; // mass, in kg, of the module
 	protected float passiveHeat; // heat generated when status = off
 	protected float activeHeat; // heat generated when status = on
-	protected float maxHeat; // heat the module can have before it starts taking damage
+	protected float shc; // specific heat capacity of the module
+	protected float temperature; // temperature the module currently has
+	protected float maxTemperature; // temperature the module can have before it starts taking damage
 	protected float health; // module health
 	protected float powerUse; // module power consumption
 
@@ -22,15 +25,10 @@ public class Module : MonoBehaviour
 		status = Status.on;
 	}
 
-	public float GenerateHeat()
+	// class methods
+	public float ChangeTemp(float heatInput)
 	{
-		if (status == Status.on)
-		{
-			return activeHeat;
-		} else
-		{
-			return passiveHeat;
-		}
+		return heatInput / (mass * shc);
 	}
 
 	// accessor methods
@@ -47,6 +45,29 @@ public class Module : MonoBehaviour
 	public int GetSize()
 	{
 		return size;
+	}
+
+	public float GetTemperature()
+	{
+		return temperature;
+	}
+
+	// mutator methods
+	public void GenerateHeat()
+	{
+		if (status == Status.on)
+		{
+			temperature += ChangeTemp(activeHeat);
+		}
+		else
+		{
+			temperature += ChangeTemp(passiveHeat);
+		}
+	}
+
+	public void ReceiveHeat(float _heat)
+	{
+		temperature += ChangeTemp(_heat);
 	}
 }
 
@@ -86,14 +107,31 @@ public class Engine : Module
 public class Radiator : Module
 {
 	float radiatedHeat; // how much heat the radiators wick away
+	bool isDeployed;
 	float deployTime; // how long it takes to retract/extend the rads
 	float vulnerability; // how much more vulnerable the radiators are when deployed compared to when stowed
-	float conductivity; // how quickly other modules' heat reaches the radiator
+
+	public bool IsDeployed()
+	{
+		return isDeployed;
+	}
+
+	public void RadiateHeat()
+	{
+		temperature += ChangeTemp(-radiatedHeat);
+	}
 }
 
-public class Heatsink : Module
+public class Heatsink : Module {
+	public enum ReservoirMaterial { solid, water, supercoolant } // three main types of possible heat reservoir material
+	ReservoirMaterial rm;
+	float reservoirMass;
+	float reservoirSHC; // specific heat capacity of the reservoir material--determined by the material
+}
+
+public class Utility : Module
 {
-	float conductivity; // how quickly other modules' heat reaches the heatsink
+
 }
 
 public class SensorSuite : Module
@@ -101,12 +139,13 @@ public class SensorSuite : Module
 	enum Type { radar, lidar } // mainly determines patterning / stealth
 	Type type;
 	float range; // theoretical max detection range
+	float swingTime; // how fast the radar array completes a 360 degree rotation
+	int detectors; // how many raycasts the sensor suite should send out per ping
 	float patterning; // how quickly detection quality increases as tracks get closer in range
 	float maxTracks; // maximum tracks possible at one time
 	// Track[] tracks;
 }
 
-// may remove this one
 public class Armor : Module
 {
 	float thickness;
@@ -118,10 +157,36 @@ public class ModuleSlot : MonoBehaviour
 	int size;
 	Module module;
 	Image image;
+	float heatReceived;
+
+	protected List<ModuleSlot> connections = new List<ModuleSlot>(); // heat connections this module slot has with other module slots
 
 	public ModuleSlot(int _size)
 	{
 		size = _size;
+	}
+
+	// utilizes the simple equation from the second law of thermodynamics
+	// to transfer heat to all connected modules
+	public void FlowHeat(float conductivity)
+	{
+		float distance;
+
+		foreach (ModuleSlot ms in connections)
+		{
+			distance = Vector2.Distance(transform.position, ms.transform.position);
+
+			// heat received by the other object
+			ms.ReceiveHeat(-conductivity * (ms.GetModule().GetTemperature() - GetModule().GetTemperature()) / distance);
+			// heat lost by this object
+			ReceiveHeat(conductivity * (ms.GetModule().GetTemperature() - GetModule().GetTemperature()) / distance);
+		}
+	}
+
+	// accessor methods
+	public Module GetModule()
+	{
+		return module;
 	}
 
 	// mutator methods
@@ -140,5 +205,16 @@ public class ModuleSlot : MonoBehaviour
 	{
 		module = null;
 		image = null;
+	}
+
+	public void ReceiveHeat(float _heatReceived)
+	{
+		heatReceived += _heatReceived;
+	}
+
+	public void GiveModuleHeat()
+	{
+		module.ReceiveHeat(heatReceived);
+		heatReceived = 0;
 	}
 }

@@ -26,9 +26,12 @@ public class Ship : MonoBehaviour
 	public float turnAccel;
 	public float mainAccel;
 
-	Module[] modules = new Module[8];
 
 	// OTHER FIELDS
+	List<ModuleSlot> modules = new List<ModuleSlot>(); // list of all the ship's modules
+
+	float conductivity; // thermal conductivity of the ship's heat transfer systems
+
 	public enum Alignment { ally, neutral, enemy }
 
 	TextMeshProUGUI telemetry;
@@ -71,37 +74,39 @@ public class Ship : MonoBehaviour
 		fuel -= Mathf.Abs(burnFraction) / 1000; // mass flow rate in METRIC TONNES
 		fuel -= Mathf.Abs(turnFraction) / 1000;
 
-		heat += AccumulateHeat();
-		heat -= RadiateHeat();
-
-        wetMass = dryMass + fuel;
+		wetMass = dryMass + fuel;
 	}
 
-	private float AccumulateHeat()
+	private void AccumulateHeat()
 	{
-		float sumHeat = 0f;
-
-		foreach (Module c in modules)
+		foreach (ModuleSlot ms in modules)
 		{
-			sumHeat += c.GenerateHeat();
+			ms.GetModule().GenerateHeat();
+		}
+	}
+
+	private void TransferHeat(float conductivity)
+	{
+		foreach (ModuleSlot ms in modules)
+		{
+			ms.FlowHeat(conductivity);
 		}
 
-		return sumHeat;
+		foreach (ModuleSlot ms in modules)
+		{
+			ms.GiveModuleHeat();
+		}
 	}
 
-	private float RadiateHeat()
+	private void RadiateHeat()
 	{
-		float radiatedHeat = 0f;
-
-		foreach (Module c in modules)
+		foreach (ModuleSlot ms in modules)
 		{
-			if (c is Radiator)
+			if (ms.GetModule() is Radiator radiator && radiator.IsDeployed())
 			{
-				radiatedHeat += ((Radiator)c).RadiateHeat();
+				radiator.RadiateHeat();
 			}
 		}
-
-		return radiatedHeat;
 	}
 
 	void FixedUpdate()
@@ -110,7 +115,11 @@ public class Ship : MonoBehaviour
 		rb.AddForce(burnFraction * effectiveExhaustVelocity * Mathf.Abs(burnFraction) * transform.up, ForceMode2D.Force);
 		rb.AddTorque(-turnFraction * effectiveExhaustVelocity * Mathf.Abs(turnFraction));
 
-		velocity = rb.velocity;
+        velocity = rb.velocity;
+
+        AccumulateHeat();
+        TransferHeat(conductivity);
+		RadiateHeat();
 	}
 
 	// ACCESSOR METHODS
