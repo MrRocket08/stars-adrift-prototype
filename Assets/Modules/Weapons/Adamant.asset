@@ -16,11 +16,11 @@ MonoBehaviour:
   mass: 6
   passiveHeat: 0.1
   activeHeat: 2
-  shc: 0.55
+  shc: 0.75
   temperature: 0
   maxTemperature: 400
   health: 50
-  powerUse: 15
+  powerUse: 8
   sprite: {fileID: 21300000, guid: 447eb869f28824eed94e171719984cbb, type: 3}
   turnSpeed: 15
   range: 12

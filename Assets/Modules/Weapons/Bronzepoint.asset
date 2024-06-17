@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f68d2fe0922de4395a1ac58e5fff21a4, type: 3}
-  m_Name: Perkin
+  m_Name: Bronzepoint
   m_EditorClassIdentifier: 
-  size: 1
-  mass: 4
+  size: 2
+  mass: 28
   passiveHeat: 0.1
-  activeHeat: 0.5
-  shc: 0.6
+  activeHeat: 0.3
+  shc: 0.5
   temperature: 0
-  maxTemperature: 600
-  health: 35
+  maxTemperature: 475
+  health: 105
   powerUse: 0.5
-  sprite: {fileID: 21300000, guid: 1ba373cde6feb4d90a0bd786949bb27f, type: 3}
-  turnSpeed: 45
-  range: 3
-  ammo: 0
-  maxAmmo: 5000
-  clip: 5000
-  clipSize: 5000
-  fireTime: 0.025
+  sprite: {fileID: 21300000, guid: 935a786af943f458998e5fd0f1673b8a, type: 3}
+  turnSpeed: 8
+  range: 25
+  ammo: 16
+  maxAmmo: 16
+  clip: 0
+  clipSize: 16
+  fireTime: 0.5
   reloadTime: 0
