@@ -3,22 +3,56 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Module : MonoBehaviour
+[CreateAssetMenu(fileName = "Module", menuName = "Module", order = 1)]
+public class Module : ScriptableObject
 {
 	public enum Status { on, off, destroyed }
 	Status status;
 
+	[SerializeField]
 	protected int size; // integer from 1-5, weapons only have 1-3
-	protected int mass; // mass, in kg, of the module
-	protected float passiveHeat; // heat generated when status = off
-	protected float activeHeat; // heat generated when status = on
-	protected float shc; // specific heat capacity of the module
-	protected float temperature; // temperature the module currently has
-	protected float maxTemperature; // temperature the module can have before it starts taking damage
-	protected float health; // module health
-	protected float powerUse; // module power consumption
+    [SerializeField]
+    protected float mass; // mass, in metric tonnes, of the module
+    [SerializeField]
+    protected float passiveHeat; // heat generated when status = off (in kJ)
+    [SerializeField]
+    protected float activeHeat; // heat generated when status = on (in kJ)
+    [SerializeField]
+    protected float shc; // specific heat capacity of the module
+    [SerializeField]
+    protected float temperature; // temperature the module currently has
+    [SerializeField]
+    protected float maxTemperature; // temperature the module can have before it starts taking damage
+    [SerializeField]
+    protected float health; // module health
+    [SerializeField]
+    protected float powerUse; // module power consumption (in MW)
+    [SerializeField]
+    protected Sprite sprite; // module sprite
 
-	protected Image image; // module image
+	/*
+	public Module(
+		int _size,
+		float _mass,
+		float _passiveHeat,
+		float _activeHeat,
+		float _shc,
+		float _temperature,
+		float _maxTemperature,
+		float _health,
+		float _powerUse
+		)
+	{
+		size = _size;
+		mass = _mass;
+		passiveHeat = _passiveHeat;
+		activeHeat = _activeHeat;
+		shc = _shc;
+		temperature = _temperature;
+		maxTemperature = _maxTemperature;
+		health = _health;
+		powerUse = _powerUse;
+	} */
 
 	protected void Awake()
 	{
@@ -37,9 +71,9 @@ public class Module : MonoBehaviour
 		return status;
 	}
 
-	public Image GetImage()
+	public Sprite GetSprite()
 	{
-		return image;
+		return sprite;
 	}
 
 	public int GetSize()
@@ -50,6 +84,11 @@ public class Module : MonoBehaviour
 	public float GetTemperature()
 	{
 		return temperature;
+	}
+
+	public float GetMaxTemperature()
+	{
+		return maxTemperature;
 	}
 
 	// mutator methods
@@ -69,27 +108,6 @@ public class Module : MonoBehaviour
 	{
 		temperature += ChangeTemp(_heat);
 	}
-}
-
-public class Weapon : Module
-{
-	public enum Side { left, right, center }
-
-	Side side;
-
-	float turnSpeed;
-	float range;
-
-	float ammo; // current ammo
-	float maxAmmo; // maximum ammo the weapon can have
-	float clip; // current ammo in the clip
-	float clipSize; // how much ammo the clip can hold
-
-	float fireTime; // time in between firing two shots
-	float reloadTime; // time it takes to reload the clip
-
-	// Track target;	// current target of the weapon (targetList[0])
-	// Track[] targetList; // targets it can potentially attack
 }
 
 public class Reactor : Module
@@ -150,71 +168,4 @@ public class Armor : Module
 {
 	float thickness;
 	bool doesSpall; // spalling armor can cause internal damage even if it is not penetrated
-}
-
-public class ModuleSlot : MonoBehaviour
-{
-	int size;
-	Module module;
-	Image image;
-	float heatReceived;
-
-	protected List<ModuleSlot> connections = new List<ModuleSlot>(); // heat connections this module slot has with other module slots
-
-	public ModuleSlot(int _size)
-	{
-		size = _size;
-	}
-
-	// utilizes the simple equation from the second law of thermodynamics
-	// to transfer heat to all connected modules
-	public void FlowHeat(float conductivity)
-	{
-		float distance;
-
-		foreach (ModuleSlot ms in connections)
-		{
-			distance = Vector2.Distance(transform.position, ms.transform.position);
-
-			// heat received by the other object
-			ms.ReceiveHeat(-conductivity * (ms.GetModule().GetTemperature() - GetModule().GetTemperature()) / distance);
-			// heat lost by this object
-			ReceiveHeat(conductivity * (ms.GetModule().GetTemperature() - GetModule().GetTemperature()) / distance);
-		}
-	}
-
-	// accessor methods
-	public Module GetModule()
-	{
-		return module;
-	}
-
-	// mutator methods
-	public bool RecieveModule(Module _module)
-	{
-		if (_module.GetSize() > size) {
-			return false;
-		} else {
-			module = _module;
-			image = module.GetImage();
-			return true;
-		}
-	}
-
-	public void RemoveModule()
-	{
-		module = null;
-		image = null;
-	}
-
-	public void ReceiveHeat(float _heatReceived)
-	{
-		heatReceived += _heatReceived;
-	}
-
-	public void GiveModuleHeat()
-	{
-		module.ReceiveHeat(heatReceived);
-		heatReceived = 0;
-	}
 }
