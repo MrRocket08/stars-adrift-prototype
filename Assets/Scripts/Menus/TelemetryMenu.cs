@@ -32,7 +32,7 @@ public class TelemetryMenu : MonoBehaviour
 			"\n\nMSL	" + ship.mslAmmo.ToString("F0") + " / " + ship.maxMslAmmo.ToString("F0") +
 			"\n--%	" + (ship.mslAmmo / ship.maxMslAmmo * 100).ToString("F2") + " %" +
 
-			"\n\nHEAT	" + ship.heat.ToString("F1") + " / " + ship.heatCapacity.ToString("F1") + " MW" +
+			"\n\nHEAT	" + ship.heat.ToString("F1") + " / " + ship.heatCapacity.ToString("F1") + " MJ" +
 			"\n--%	" + (ship.heat / ship.heatCapacity * 100).ToString("F2") + " %";
 	}
 }
