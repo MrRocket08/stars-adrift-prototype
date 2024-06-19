@@ -30,3 +30,4 @@ MonoBehaviour:
   heatCapacity: 54
   turnAccel: 2
   mainAccel: 4
+  conductivity: 48

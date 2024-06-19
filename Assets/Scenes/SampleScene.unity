@@ -2091,6 +2091,7 @@ MonoBehaviour:
   maxMslAmmo: 10
   heat: 0
   heatCapacity: 54
+  conductivity: 0
   turnAccel: 2
   mainAccel: 4
   maneuvers:
@@ -8581,7 +8582,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7db10e4aadd2d48e7a7c6d43fcf5018c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  module: {fileID: 11400000, guid: d87623a6afde2474f91e42b6fbb97cfc, type: 2}
+  module: {fileID: 11400000, guid: ae7e2ddd05a024c21b4078edb80d3c74, type: 2}
   image: {fileID: 962821692}
   heatGradient:
     serializedVersion: 2

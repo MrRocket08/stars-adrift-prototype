@@ -19,4 +19,6 @@ public class ShipData : ScriptableObject
 
     public float turnAccel;
     public float mainAccel;
+
+    public float conductivity;
 }

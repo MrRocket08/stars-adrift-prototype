@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ea99fb238ef3440687570a195551f96, type: 3}
   m_Name: NPE_Odysseus
   m_EditorClassIdentifier: 
+  status: 0
   size: 3
   mass: 75
   passiveHeat: 0.1

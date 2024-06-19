@@ -6,28 +6,21 @@ using UnityEngine.UI;
 public class Module : ScriptableObject
 {
 	public enum Status { on, off, destroyed }
-	Status status;
+	[SerializeField]
+	protected Status status;
 
-	[SerializeField]
-	protected int size; // integer from 1-5, weapons only have 1-3
-	[SerializeField]
-	protected float mass; // mass, in metric tonnes, of the module
-	[SerializeField]
-	protected float passiveHeat; // heat generated when status = off (in MJ)
-	[SerializeField]
-	protected float activeHeat; // heat generated when status = on (in MJ)
-	[SerializeField]
-	protected float shc; // specific heat capacity of the module
-	[SerializeField]
-	protected float temperature; // temperature the module currently has
-	[SerializeField]
-	protected float maxTemperature; // temperature the module can have before it starts taking damage
-	[SerializeField]
-	protected float health; // module health
-	[SerializeField]
-	protected float powerUse; // module power consumption (in MW)
-	[SerializeField]
-	protected Sprite sprite; // module sprite
+	// DEPRECATE ASAP
+    public float shc; // specific heat capacity of the module
+    public float temperature; // temperature the module currently has
+    public float maxTemperature; // temperature the module can have before it starts taking damage
+
+    public int size; // integer from 1-5, weapons only have 1-3
+	public float mass; // mass, in metric tonnes, of the module
+	public float passiveHeat; // heat generated when status = off (in MJ)
+	public float activeHeat; // heat generated when status = on (in MJ)
+	public float health; // module health
+	public float powerUse; // module power consumption (in MW)
+	public Sprite sprite; // module sprite
 
 	protected void Awake()
 	{
@@ -36,80 +29,22 @@ public class Module : ScriptableObject
 	}
 
 	// class methods
-	protected float ChangeTemp(float heatInput)
-	{
-		Debug.Log(heatInput * 10 / (mass * shc));
-		return heatInput * 10 / (mass * shc); // because heat generation is in MJ
-	}
-
-	// accessor methods
-	public Status GetStatus()
-	{
-		return status;
-	}
-
-	public Sprite GetSprite()
-	{
-		return sprite;
-	}
-
-	public int GetSize()
-	{
-		return size;
-	}
-
-	public float GetMass()
-	{
-		return mass;
-	}
-
-	public float GetSHC()
-	{
-		return shc;
-	}
-
-	public float GetTemperature()
-	{
-		return temperature;
-	}
-
-	public float GetMaxTemperature()
-	{
-		return maxTemperature;
-	}
 
 	// mutator methods
-	public void SetTemperature(float newTemp)
-	{
-		temperature = newTemp;
-	}
 
-	public void ClampTemperature()
-	{
-		if (temperature > maxTemperature)
-		{
-			temperature = maxTemperature;
-		}
-	}
-
-	public void GenerateHeat()
+	public float GenerateHeat()
 	{
 		if (status == Status.on)
 		{
-			temperature += ChangeTemp(activeHeat);
-			ClampTemperature();
+			return Time.deltaTime * activeHeat;
 		}
-		else
+		else if (status == Status.off)
 		{
-			temperature += ChangeTemp(passiveHeat);
-			ClampTemperature();
+			return Time.deltaTime * passiveHeat;
+		} else
+		{
+			return 0;
 		}
-	}
-
-	public void ReceiveHeat(float _heat)
-	{
-		temperature += ChangeTemp(_heat);
-		ClampTemperature();
 	}
 }
 

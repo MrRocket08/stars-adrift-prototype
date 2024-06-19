@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f68d2fe0922de4395a1ac58e5fff21a4, type: 3}
   m_Name: Perkin
   m_EditorClassIdentifier: 
+  status: 0
   size: 1
   mass: 4
   passiveHeat: 0.1

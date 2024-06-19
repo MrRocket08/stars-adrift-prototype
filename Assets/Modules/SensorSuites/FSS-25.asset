@@ -9,20 +9,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca43113a920ac427491a600364a92d40, type: 3}
-  m_Name: RXL-6
+  m_Script: {fileID: 11500000, guid: 33f817efa5e4c4be4943d2c337077695, type: 3}
+  m_Name: FSS-25
   m_EditorClassIdentifier: 
   status: 0
-  size: 3
-  mass: 20
-  passiveHeat: 0
-  activeHeat: 0
-  shc: 6
+  size: 2
+  mass: 15
+  passiveHeat: 0.1
+  activeHeat: 1.5
+  shc: 0.45
   temperature: 0
-  maxTemperature: 1500
-  health: 30
-  powerUse: 0.5
+  maxTemperature: 200
+  health: 20
+  powerUse: 5
   sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  radiatedHeat: 30
-  deployTime: 15
-  vulnerability: 4
+  type: 0
+  range: 250
+  swingTime: 10
+  detectors: 15
+  patterning: 3
+  maxTracks: 8

@@ -25,6 +25,7 @@ public class Ship : MonoBehaviour
 
 	public float heat;
 	public float heatCapacity;
+	public float conductivity; // thermal conductivity of the ship's heat transfer systems
 
 	public float turnAccel;
 	public float mainAccel;
@@ -32,7 +33,6 @@ public class Ship : MonoBehaviour
 	// OTHER FIELDS
 	ModuleSlot[] modules; // list of all the ship's modules
 
-	float conductivity; // thermal conductivity of the ship's heat transfer systems
 
 	public enum Alignment { ally, neutral, enemy }
 
@@ -64,6 +64,7 @@ public class Ship : MonoBehaviour
 		maxFuel = sd.maxFuel;
 		heat = sd.heat;
 		heatCapacity = sd.heatCapacity;
+		conductivity = sd.conductivity;
 		turnAccel = sd.turnAccel;
 		mainAccel = sd.mainAccel;
 
@@ -95,9 +96,10 @@ public class Ship : MonoBehaviour
 				} else if (m is Radiator radiator)
 				{
 					radiator.Deploy();
+				} else if (m is Heatsink h)
+				{
+					heatCapacity = h.heatCapacity;
 				}
-
-				heatCapacity += m.GetMass() * m.GetSHC() * m.GetMaxTemperature() / 1000000;
 			}
 		}
 	}
@@ -121,20 +123,7 @@ public class Ship : MonoBehaviour
 		}
 	}
 
-	private void TransferHeat(float conductivity)
-	{
-		foreach (ModuleSlot ms in modules)
-		{
-			ms.FlowHeat(conductivity);
-		}
-
-		foreach (ModuleSlot ms in modules)
-		{
-			ms.GiveModuleHeat();
-		}
-	}
-
-	private void RadiateHeat()
+	private void DisperseHeat()
 	{
 		foreach (ModuleSlot ms in modules)
 		{
@@ -154,8 +143,7 @@ public class Ship : MonoBehaviour
 		velocity = rb.velocity;
 
 		AccumulateHeat();
-		TransferHeat(conductivity);
-		RadiateHeat();
+		DisperseHeat();
 	}
 
 	// ACCESSOR METHODS
